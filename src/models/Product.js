@@ -75,6 +75,12 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false
         }
       });
+    Product.hasMany(db.Cart, {
+      foreignKey: {
+        name: "productId",
+        allowNull: false
+      }
+    });
   };
 
   return Product;

@@ -6,8 +6,7 @@ const morgan = require("morgan");
 const authRoute = require("./routes/authRoute");
 const productRoute = require("./routes/productRoute");
 const cartRoute = require("./routes/cartRoute");
-// const userRoute = require("./routes/userRoute");
-// const authenticate = require("./middlewares/authenticate");
+const orderRoute = require("./routes/orderRoute");
 const notFound = require("./middlewares/notFound");
 const error = require("./middlewares/error");
 const authenticate = require("./middlewares/authenticate");
@@ -25,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/auth", authRoute);
 app.use("/product", productRoute);
 app.use("/cart", authenticate, cartRoute);
-// app.use("/posts", authenticate, postRoute);
+app.use("/order", authenticate, orderRoute);
 
 app.use(notFound);
 app.use(error);

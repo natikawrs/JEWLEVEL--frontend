@@ -2,28 +2,42 @@ const { where } = require("sequelize");
 const { Cart, Product } = require("../models");
 const AppError = require("../utils/appError");
 
+exports.updateCart = async (req, res, next) => {
+  try {
+    const { cart } = req.body;
+    const item = await Cart.update(cart, { where: { id: cart.id } });
+    // console.log(res);
+    res.status(200).json({ item });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.createCart = async (req, res, next) => {
   try {
-    const { productId } = req.body;
+    const { productId, quantity } = req.body;
     // const { id } = req.params;
 
     const userId = req.user.id;
-    // console.log(userId);
+
     const cart = await Cart.findOne({
       where: { userId, productId }
     });
-    // console.log(cart);
+
     if (cart) {
-      throw new AppError("already have this item in cart", 400);
+      const item = await Cart.update(
+        { productId, quantity },
+        { where: { id: cart.id } }
+      );
+    } else {
+      const item = {
+        userId,
+        productId,
+        quantity
+      };
+
+      await Cart.create(item);
     }
-
-    const item = {
-      userId,
-      productId,
-      quantity: 1
-    };
-
-    await CartItem.create(item);
 
     const JoinCartData = await Cart.findOne({
       where: { userId, productId },
@@ -77,16 +91,16 @@ exports.deleteCart = async (req, res, next) => {
   }
 };
 
-exports.updateCart = async (req, res, next) => {
-  try {
-    const { cartItem } = req.body;
-    const item = await Cart.update(cartItem, { where: { id: cartItem.id } });
-    // console.log(res);
-    res.status(200).json({ item });
-  } catch (err) {
-    next(err);
-  }
-};
+// exports.updateCart = async (req, res, next) => {
+//   try {
+//     const { cartItem } = req.body;
+//     const item = await Cart.update(cartItem, { where: { id: cartItem.id } });
+//     // console.log(res);
+//     res.status(200).json({ item });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 exports.getTotalPrice = async (req, res, next) => {
   try {
