@@ -71,7 +71,8 @@ exports.getCart = async (req, res, next) => {
         {
           model: Product
         }
-      ]
+      ],
+      order: [["updatedAt", "DESC"]]
     });
 
     res.status(201).json({ JoinCartData });
@@ -86,6 +87,15 @@ exports.deleteCart = async (req, res, next) => {
 
     await Cart.destroy({ where: { id: cartId } });
     res.status(200).json({ message: "success Delete" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.clearCart = async (req, res, next) => {
+  try {
+    await Cart.destroy({ where: { userId: req.user.id } });
+    res.status(200).json({ message: "success clear" });
   } catch (err) {
     next(err);
   }
@@ -119,7 +129,7 @@ exports.getTotalPrice = async (req, res, next) => {
       0
     );
 
-    console.log(totalPrice);
+    // console.log(totalPrice);
 
     res.status(201).json({ totalPrice });
   } catch (err) {

@@ -8,7 +8,7 @@ exports.updateUser = async (req, res, next) => {
       firstName,
       lastName,
       displayName,
-      password,
+      // password,
       address,
       street,
       subDistrict,
@@ -20,14 +20,14 @@ exports.updateUser = async (req, res, next) => {
       expiredDate,
       cvc
     } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // const hashedPassword = await bcrypt.hash(password, 12);
 
     await User.update(
       {
         firstName,
         lastName,
         displayName,
-        password: hashedPassword,
+        // password: hashedPassword,
         address,
         street,
         subDistrict,

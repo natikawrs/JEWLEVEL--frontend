@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const authRoute = require("./routes/authRoute");
+const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const cartRoute = require("./routes/cartRoute");
 const orderRoute = require("./routes/orderRoute");
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/auth", authRoute);
+app.use("/user", authenticate, userRoute);
 app.use("/product", productRoute);
 app.use("/cart", authenticate, cartRoute);
 app.use("/order", authenticate, orderRoute);

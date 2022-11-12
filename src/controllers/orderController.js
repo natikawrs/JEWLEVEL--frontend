@@ -120,7 +120,8 @@ exports.getUserOrder = async (req, res, next) => {
     // console.log(userId);
     const orders = await Order.findAll({
       where: { userId },
-      include: [{ model: OrderItem, include: { model: Product } }]
+      include: [{ model: OrderItem, include: { model: Product } }],
+      order: [["updatedAt", "DESC"]]
     });
     res.status(200).json({ orders: orders });
   } catch (err) {

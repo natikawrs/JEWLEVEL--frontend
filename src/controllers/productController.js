@@ -25,7 +25,8 @@ exports.getWishList = async (req, res) => {
   const userId = req.user.id;
   const findWishListByUser = await Wishlist.findAll({
     where: { userId: userId },
-    include: { model: Product }
+    include: { model: Product },
+    order: [["updatedAt", "DESC"]]
   });
   res.status(200).json({ findWishListByUser });
 };
