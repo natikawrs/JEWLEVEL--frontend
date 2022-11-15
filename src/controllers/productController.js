@@ -1,6 +1,6 @@
 const productService = require("../services/productService");
 
-const { Product, Wishlist } = require("../models");
+const { Product, Wishlist, Review, User } = require("../models");
 
 exports.getAllProducts = async (req, res, next) => {
   try {
@@ -19,6 +19,34 @@ exports.getProduct = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.getProductReview = async (req, res, next) => {
+  const { productId } = req.params;
+  try {
+    const review = await Review.findOne({
+      where: { id: productId },
+      include: { model: User, attributes: { exclude: "password" } }
+    });
+    res.status(200).json({ review });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.createReview = async (req, res, next) => {
+  // const userId = req.user.id;
+  const { productId, review, rating } = req.body;
+  try {
+    const addWishList = await Wishlist.create({
+      // userId,
+      productId,
+      review,
+      rating
+    });
+
+    return res.status(201).json({ addWishList });
+  } catch (err) {}
 };
 
 exports.getWishList = async (req, res) => {
